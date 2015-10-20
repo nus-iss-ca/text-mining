@@ -1,3 +1,26 @@
+# GIT
+Instruction for git commands:
+- Pull source code from repo
+```sh
+$ git pull origin master
+```
+- Check file status
+```sh
+$ git status
+```
+- Add file after modify
+```sh
+$ git add .
+```
+- Commit file to repo`
+```sh
+$ git commit -m "message"
+```
+- Push to repo
+```sh
+$ git push origin master
+```
+
 Run pip install -r requirements.txt
 Run python main.py
 Check result directory to see the result
