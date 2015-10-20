@@ -1,11 +1,11 @@
 # GIT
 Instruction for git commands:
 - Pull source code from repo
-```
+```sh
 $ git pull origin master
 ```
 - Check file status
-```
+```sh
 $ git status
 ```
 - Add file after modify
