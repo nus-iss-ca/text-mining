@@ -1,0 +1,5 @@
+nltk==2.0.5
+wordcloud
+pandas
+textmining
+sklearn
