@@ -24,20 +24,42 @@ class Util():
     def __init__(self):
         self.wnl = nltk.WordNetLemmatizer()
 
-    def remove_stopword(data):
+    # function to remove stopwords
+    # input: tbd
+    # output: tbd
+    def remove_stopword(self, data):
+        return True
 
-
-    def normalize(data):
+    # function to normalize text, remove all the encoding, escape and special characters
+    # input: tbd
+    # output: tbd
+    def normalize(self, data):
         ntext = unicodedata.normalize('NFKD', data).encode('ascii','ignore')
         return ntext
 
-    def remove_punctuation(data, punc):
+    # function to remove punctuation
+    # input: tbd
+    # output: tbd
+    def remove_punctuation(self, data, punc):
         text_nopunc = ntext.translate(string.maketrans(punc), string.punctuation)
         return text_nopunc
 
-    def lemmatize(tokens):
+    # function to lemma tokens
+    # input: tbd
+    # output: tbd
+    def lemmatize(self, tokens):
         text_lem = " ".join([self.wnl.lemmatize(t) for t in tokens])
         return text_lem
 
-    def preprocessing(data):
-        
+    # function to pre-process text
+    # input: tbd
+    # output: tbd
+    def preprocessing(self, data):
+        return True
+
+    # function to create word clouds
+    # input: tbd
+    # output: tbd
+    def create_wordclouds(self):
+        return True
+
