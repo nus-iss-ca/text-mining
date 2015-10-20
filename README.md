@@ -20,7 +20,7 @@ $ git commit -m "message"
 ```sh
 $ git push origin master
 ```
-
-Run pip install -r requirements.txt
-Run python main.py
-Check result directory to see the result
+# Run Application
+1.Run pip install -r requirements.txt
+2.Run python main.py
+3.Check result directory to see the result
