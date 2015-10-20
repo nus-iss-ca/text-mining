@@ -21,6 +21,6 @@ $ git commit -m "message"
 $ git push origin master
 ```
 # Run Application
-1.Run pip install -r requirements.txt
-2.Run python main.py
-3.Check result directory to see the result
+1. Run pip install -r requirements.txt
+2. Run python main.py
+3. Check result directory to see the result
