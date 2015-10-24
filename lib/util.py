@@ -14,35 +14,37 @@ import collections
 import operator
 
 from nltk.corpus import stopwords
-from nltk import word_tokenize
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk import stem
-from sklearn.feature_extraction.text import CountVectorizer
 from nltk.tokenize import word_tokenize as wt
+from nltk.probability import FreqDist
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.svm import SVC
 
 class Util():
 
     def __init__(self):
         self.wnl = nltk.WordNetLemmatizer()
+        self.stopwords = stopwords.words('english')
 
     # function to remove stopwords
-    # input: tbd
-    # output: tbd
-    def remove_stopword(self, data):
-        return True
+    # input: text to remove stopword
+    # output: text
+    def remove_stopword(self, text):
+        return " ".join(filter(lambda word: word not in self.stopwords, text.split()))
 
     # function to normalize text, remove all the encoding, escape and special characters
-    # input: tbd
-    # output: tbd
-    def normalize(self, data):
-        ntext = unicodedata.normalize('NFKD', data).encode('ascii','ignore')
+    # input: text 
+    # output: text
+    def normalize(self, text):
+        ntext = unicodedata.normalize('NFKD', text).encode('ascii','ignore')
         return ntext
 
     # function to remove punctuation
-    # input: tbd
-    # output: tbd
-    def remove_punctuation(self, data, punc):
-        text_nopunc = ntext.translate(string.maketrans(punc), string.punctuation)
+    # input: text, transform character from_char to character to_char
+    # output: text
+    def remove_punctuation(self, text, from_char, to_char):
+        text_nopunc = text.translate(string.maketrans(from_char, to_char), string.punctuation)
         return text_nopunc
 
     # function to lemma tokens
@@ -52,11 +54,25 @@ class Util():
         text_lem = " ".join([self.wnl.lemmatize(t) for t in tokens])
         return text_lem
 
-    # function to pre-process text
-    # input: tbd
-    # output: tbd
-    def preprocessing(self, data):
-        return True
+    # function to pre-process text: unicode normalize, remove punctation, lower text, remove stopword
+    # input: dataframe data, columns array
+    # output: dataframe 
+    def preprocessing(self, data, columns):
+        result = pd.DataFrame(columns=columns)
+        data = data.dropna()
+        for c in columns:
+            for index, row in data.iterrows():
+                if isinstance(row[c],int):
+                    print str(index) + "----" + str(row[c])
+                    data = data.drop(index)
+                else:
+                    temp = self.normalize(row[c])
+                    temp = self.remove_punctuation(temp, "","")
+                    temp = temp.lower()
+                    temp = self.remove_stopword(temp)
+                    result.loc[index, c] = temp
+        
+        return result
 
     # function to create word clouds
     # input: tbd
@@ -64,3 +80,34 @@ class Util():
     def create_wordclouds(self):
         return True
 
+    # function to train SVM
+    # input: vectors tfidf, data, parameter for C, gamma and kernel
+    # output: svm model
+    def train_svm(vectors, data, C, gamma, kernel):
+        svm = SVC(C=C, gamma=gamma, kernel=kernel)
+        svm.fit(vectors, data)
+        return svm
+
+    # def convert_pd_to_text(self, df):
+    #     temp = pd.DataFrame()
+    #     columns = list(df.column.values)
+    #     for c in columns:
+            
+    #     result = pd.concat([df, df['bar'].dropna()]).reindex_like(df)
+
+class Construction():
+    def __init__(self, dictionary):
+        self.dictionary = dictionary
+
+    def get_construction_category(self, string):
+        result = []
+        for word in string:
+            if word in self.dictionary:
+                result.append('Construction')
+            else:
+                result.append('Others')
+        return result
+
+    # data: dataframe
+    def identify_construction(self, data):
+        return True
