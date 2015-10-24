@@ -18,6 +18,7 @@ from nltk.stem.wordnet import WordNetLemmatizer
 from nltk import stem
 from nltk.tokenize import word_tokenize as wt
 from nltk.probability import FreqDist
+from nltk import pos_tag
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.svm import SVC
 
@@ -71,6 +72,27 @@ class Util():
                     temp = self.remove_stopword(temp)
                     result.loc[index, c] = temp
         
+        return result.dropna()
+
+    # function to do POS tag
+    # input: dataframe, columns array, tag array
+    def pos_tag(self, data, columns, tag):
+        result = pd.DataFrame(columns=columns)
+        data = data.dropna()
+        result.title = data.title
+        for index, row in data.iterrows():
+            if not isinstance(row['summary'], int):
+                temp = self.normalize(row['summary'])
+                pos = pos_tag(wt(temp))
+                temp = " ".join(noun[0] for noun in pos if noun[1] in tag)
+                result.loc[index, 'summary'] = unicode(temp)
+        # for c in columns:
+        #     for index, row in data.iterrows():
+        #         if not isinstance(row[c], int):
+        #             temp = self.normalize(row[c])
+        #             pos = pos_tag(wt(temp))
+        #             temp = " ".join(noun[0] for noun in pos if noun[1] in tag)
+        #             result.loc[index, c] = unicode(temp)
         return result.dropna()
 
     # function to create word clouds
