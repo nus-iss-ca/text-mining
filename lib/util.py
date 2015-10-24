@@ -64,7 +64,6 @@ class Util():
             for index, row in data.iterrows():
                 if isinstance(row[c],int):
                     print str(index) + "----" + str(row[c])
-                    data = data.drop(index)
                 else:
                     temp = self.normalize(row[c])
                     temp = self.remove_punctuation(temp, "","")
@@ -72,7 +71,7 @@ class Util():
                     temp = self.remove_stopword(temp)
                     result.loc[index, c] = temp
         
-        return result
+        return result.dropna()
 
     # function to create word clouds
     # input: tbd
