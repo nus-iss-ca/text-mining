@@ -18,6 +18,7 @@ from nltk import word_tokenize
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk import stem
 from sklearn.feature_extraction.text import CountVectorizer
+from nltk.tokenize import word_tokenize as wt
 
 class Util():
 
