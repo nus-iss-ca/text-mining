@@ -17,4 +17,6 @@ l = []
 for i in list_id:
 	l.append(osha_data[osha_data['id'] == i])
 temp = pd.concat(l)
-temp.to_csv("osha_filter.csv")
+temp = temp[temp.summary != 'InspectionOpen DateSICEstablishment Name']
+temp = temp.drop_duplicates(cols='id', keep='last')
+temp.to_csv("result/osha_filter.csv", index = False)
