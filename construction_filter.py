@@ -19,4 +19,5 @@ for i in list_id:
 temp = pd.concat(l)
 temp = temp[temp.summary != 'InspectionOpen DateSICEstablishment Name']
 temp = temp.drop_duplicates(cols='id', keep='last')
+temp['summary'] = temp['summary'].map(lambda x: x.lstrip().rstrip())
 temp.to_csv("result/osha_filter.csv", index = False)
