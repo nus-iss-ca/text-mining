@@ -10,7 +10,7 @@ import pandas as pd
 import nltk
 import random
 #import json
-#import unicodedata
+import unicodedata
 import string
 import io
 import numpy as np
@@ -234,10 +234,12 @@ for i in lem_text:
 m_df['lem_text'] = cleaned_train
 
 # read osha data
-#o_df_test = pd.read_excel("osha.xlsx", header = None)
-o_df_test = pd.read_csv("osha.csv")
+o_df_test = pd.read_excel("filtered_construction_data_refined.xlsx")
+o_df_test = o_df_test[['id','title','summary']]
+#o_df_test = pd.read_csv("osha.csv")
 #lem_text = o_df_test[1].tolist()
-lem_text = o_df_test['Title'].tolist()
+lem_text = o_df_test['title'].tolist()
+lem_text = [str(x) for x in lem_text]
 
 cleaned_train=[]
 
