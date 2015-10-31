@@ -12,6 +12,8 @@ import sklearn
 import numpy as np
 import collections
 import operator
+import image
+# import matplotlib.pyplot as plt
 
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
@@ -21,6 +23,8 @@ from nltk.probability import FreqDist
 from nltk import pos_tag
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.svm import SVC
+from wordcloud import WordCloud
+# from pytagcloud import create_tag_image, make_tags, LAYOUTS
 
 class Util():
 
@@ -31,11 +35,13 @@ class Util():
     # function to remove stopwords
     # input: text to remove stopword
     # output: text
-    def remove_stopword(self, text):
-        return " ".join(filter(lambda word: word not in self.stopwords, text.split()))
+    def remove_stopword(self, text, stop = None):
+        if stop == None:
+            stop = self.stopwords
+        return " ".join(filter(lambda word: word not in stop, text.split()))
 
     # function to normalize text, remove all the encoding, escape and special characters
-    # input: text 
+    # input: text
     # output: text
     def normalize(self, text):
         ntext = unicodedata.normalize('NFKD', text).encode('ascii','ignore')
@@ -57,7 +63,7 @@ class Util():
 
     # function to pre-process text: unicode normalize, remove punctation, lower text, remove stopword
     # input: dataframe data, columns array
-    # output: dataframe 
+    # output: dataframe
     def preprocessing(self, data, columns):
         result = pd.DataFrame(columns=columns)
         data = data.dropna()
@@ -66,12 +72,13 @@ class Util():
                 if isinstance(row[c],int):
                     print str(index) + "----" + str(row[c])
                 else:
-                    temp = self.normalize(row[c])
+                    temp = row[c]
+                    #temp = self.normalize(row[c])
                     temp = self.remove_punctuation(temp, "","")
                     temp = temp.lower()
                     temp = self.remove_stopword(temp)
                     result.loc[index, c] = temp
-        
+
         return result.dropna()
 
     # function to do POS tag
@@ -82,9 +89,11 @@ class Util():
         result.title = data.title
         for index, row in data.iterrows():
             if not isinstance(row['summary'], int):
-                temp = self.normalize(row['summary'])
+                #temp = self.normalize(row['summary'].strip('#'))
+                temp = row['summary']
                 pos = pos_tag(wt(temp))
                 temp = " ".join(noun[0] for noun in pos if noun[1] in tag)
+                print temp
                 result.loc[index, 'summary'] = unicode(temp)
         # for c in columns:
         #     for index, row in data.iterrows():
@@ -98,8 +107,36 @@ class Util():
     # function to create word clouds
     # input: tbd
     # output: tbd
-    def create_wordclouds(self):
-        return True
+    def create_wordclouds(self, text, name_of_cloud, additional_stop_list, max_words, width, height, bigram = False):
+        text_nopunc = self.remove_punctuation(text, "", "")
+        text_lower = text_nopunc.lower()
+        stop = self.stopwords
+        stop.extend(additional_stop_list)
+        text_nostop = self.remove_stopword(text_lower, stop)
+        tokens = wt(text_nostop)
+        text_lem = self.lemmatize(tokens)
+        tokens_lem = wt(text_lem)
+        my_bigrams = nltk.bigrams(tokens_lem)
+        if bigram:
+            bigram_merged=list()
+            for line in my_bigrams:
+                bigram_merged.append(line[0]+' ' + line[1])
+            counts = collections.Counter(bigram_merged)
+        else:
+            counts = collections.Counter(tokens_lem)
+        final = counts.most_common(max_words)
+        max_count = max(final, key=operator.itemgetter(1))[1]
+        final = [(name, count / float(max_count))for name, count in final]
+        self.save_array_to_file(final, "result/final_wordcloud.csv")
+        print "Test"
+        # tags = make_tags(final, maxsize=max_word_size)
+        # create_tag_image(tags, name_of_cloud+'.png', size=(width, height), layout=3, fontname='Crimson Text', background = (255, 255, 255))
+
+        # temp_cloud = " ".join(text for text, count in final)
+        word_cloud = WordCloud(font_path="/Library/Fonts/Georgia.ttf",
+            width=width, height=height, max_words=max_words, stopwords=stop)
+        word_cloud.fit_words(final)
+        word_cloud.to_file(name_of_cloud + ".png")
 
     # function to train SVM
     # input: vectors tfidf, data, parameter for C, gamma and kernel
@@ -113,8 +150,15 @@ class Util():
     #     temp = pd.DataFrame()
     #     columns = list(df.column.values)
     #     for c in columns:
-            
+
     #     result = pd.concat([df, df['bar'].dropna()]).reindex_like(df)
+
+    # using dataframe to save array to file
+    def save_array_to_file(self, array, path):
+        temp_df = pd.DataFrame(columns = ["text"])
+        for item in array:
+            temp_df = temp_df.append({"text": item}, ignore_index = True)
+        temp_df.to_csv(path, index = False)
 
 class Construction():
     def __init__(self, dictionary):
