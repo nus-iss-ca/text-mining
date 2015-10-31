@@ -10,15 +10,14 @@ osha_data.columns = ['id', 'title', 'summary']
 #
 # #pos tag data, only get verb as the activites
 # pattern = "(was|were ([\w]*).*)"
-pattern = r"were \w*"
 
 temp_summary = []
 for index, row in osha_data.iterrows():
     print("===========================================")
     print row["summary"]
-    m = re.search(pattern, row["summary"])
+    m = re.findall(r'was([^.]*).', row["summary"])
     print("------------------------------------------")
-    print m.groups()
+    print m
     break
     # if m:
     #     temp_summary.append(m.groups())
