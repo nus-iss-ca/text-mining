@@ -31,7 +31,7 @@ for i in lem_text:
     text_lower = util.remove_punctuation(i, "", "").lower()
     stop = stopwords.words('english')
     text_nostop = " ".join(filter(lambda word: word not in stop, text_lower.split()))
-    tokens = word_tokenize(text_nostop)
+    tokens = wt(text_nostop)
     wnl = nltk.WordNetLemmatizer()
     text_lem=" ".join([wnl.lemmatize(t) for t in tokens])
     #tokens_lem = word_tokenize(text_lem)
@@ -70,7 +70,7 @@ for counter in range(1,11):
     test_vectors = vectorizer.transform(m_df_test['lem_text'])
 
     # Train the SVM
-    sv = util.train_svm(train_vectors, m_df_train['Cause '], C = 5000.0, gamma= 0.0, kernel = 'rbf')
+    sv = util.train_svm(train_vectors, m_df_train['Cause '], 5000.0, 0.0, 'rbf')
 
     # Predict on the Test set using the trained SVM
     predSVM = sv.predict(test_vectors)
@@ -159,7 +159,7 @@ for i in lem_text:
     #stop = [k for k in stop if k not in ['no','nor','not','don','against','very','too']]
     #stop.extend(additional_stop_list)
     text_nostop=" ".join(filter(lambda word: word not in stop, text_lower.split()))
-    tokens = word_tokenize(text_nostop)
+    tokens = wt(text_nostop)
     wnl = nltk.WordNetLemmatizer()
     text_lem=" ".join([wnl.lemmatize(t) for t in tokens])
     #tokens_lem = word_tokenize(text_lem)
@@ -183,7 +183,7 @@ for i in lem_text:
     #stop = [k for k in stop if k not in ['no','nor','not','don','against','very','too']]
     #stop.extend(additional_stop_list)
     text_nostop=" ".join(filter(lambda word: word not in stop, text_lower.split()))
-    tokens = word_tokenize(text_nostop)
+    tokens = wt(text_nostop)
     wnl = nltk.WordNetLemmatizer()
     text_lem=" ".join([wnl.lemmatize(t) for t in tokens])
     #tokens_lem = word_tokenize(text_lem)
@@ -203,7 +203,7 @@ train_vectors = vectorizer.fit_transform(m_df_train['lem_text'])
 test_vectors = vectorizer.transform(o_df_test['lem_text'])
 
 # Train the SVM
-sv = util.train_svm(train_vectors, m_df_train['Cause '])
+sv = util.train_svm(train_vectors, m_df_train['Cause '], 5000.0, 0.0, 'rbf')
 
 # Predict on the Test set using the trained SVM
 predSVM= sv.predict(test_vectors)
@@ -249,3 +249,4 @@ final_pred = list(count_cat['Max'])
 o_df_test['final_pred'] = final_pred
 
 o_df_test.to_csv('result/2_question1.csv')
+print("========DONE==========")

@@ -24,6 +24,12 @@ from nltk import pos_tag
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.svm import SVC
 from wordcloud import WordCloud
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import accuracy_score
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_model import LogisticRegression
 # from pytagcloud import create_tag_image, make_tags, LAYOUTS
 
 class Util():
@@ -141,8 +147,8 @@ class Util():
     # function to train SVM
     # input: vectors tfidf, data, parameter for C, gamma and kernel
     # output: svm model
-    def train_svm(vectors, data, C, gamma, kernel):
-        svm = SVC(C=C, gamma=gamma, kernel=kernel)
+    def train_svm(self, vectors, data, C_value, gamma_value, kernel_value):
+        svm = SVC(C=C_value, gamma=gamma_value, kernel=kernel_value)
         svm.fit(vectors, data)
         return svm
 
@@ -154,7 +160,7 @@ class Util():
         temp_df.to_csv(path, index = False)
 
     # Decision Tree Classifier
-    def train_dtc(X, y):
+    def train_dtc(self, X, y):
         """
         Create and train the Decision Tree Classifier.
         """
@@ -163,7 +169,7 @@ class Util():
         return dtc
 
     # K-Nearest Neighbour Classifier
-    def train_knn(X, y, n, weight):
+    def train_knn(self, X, y, n, weight):
         """
         Create and train the k-nearest neighbor.
         """
@@ -172,7 +178,7 @@ class Util():
         return knn
 
     # Logistic Regression Classifier
-    def train_lr(X, y):
+    def train_lr(self, X, y):
         """
         Create and train the Naive Baye's Classifier.
         """
