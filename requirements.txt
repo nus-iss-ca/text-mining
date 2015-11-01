@@ -1,1 +1,4 @@
 image
+pandas
+textmining
+wordcloud
