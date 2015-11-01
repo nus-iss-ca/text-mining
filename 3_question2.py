@@ -117,7 +117,7 @@ def main():
     count_object = counts(final_object_cloud)
 
      # Word Clouds:
-    word_cloud(count_object, "result/3_question2", 100, 1280, 800)
+    word_cloud(count_object, "result/3_question2", 50, 1280, 800)
 
     # Save output file:
     df['Objects2'] = pd.DataFrame(final_object_cloud)

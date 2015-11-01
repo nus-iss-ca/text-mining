@@ -48,14 +48,14 @@ for row in pos_array:
 # export to world cloud
 counts = collections.Counter(counter_array)
 counts += collections.Counter()
-final = counts.most_common(100)
+final = counts.most_common(50)
 max_count = max(final, key=operator.itemgetter(1))[1]
 final = [(name, count / float(max_count))for name, count in final]
 final.pop(0) # remove "working"
 final.pop(0) # remove "opening"
 print final
 word_cloud = WordCloud(font_path="onts/Georgia.ttf",
-    width=1280, height=800, max_words=100, stopwords=[])
+    width=1280, height=800, max_words=50, stopwords=[])
 word_cloud.fit_words(final)
 word_cloud.to_file("result/5_question4.png")
 

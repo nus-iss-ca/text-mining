@@ -75,7 +75,6 @@ for i in list[0:]:
                 break
         if is_break: break
     # If occupation not found in list then using regular expression which used er,or,anic words to fetch as occupation
-    print occ_list1
     if occ_list1==[]:
         occ_list1=[m.group(0) for l in text1 for m in [regex1.search(l)] if m]
         if not occ_list1:
@@ -87,19 +86,16 @@ dd = df.ix[0:,0:3]
 dd['Occupation'] = pd.Series(occ_list, index=df.index)
 dd.to_csv('result/4_question3.csv', index = False)
 
-print "Final List"
-print occ_list
-
 #Word cloud
 counts = collections.Counter(occ_list)
-temp_obj = counts.most_common(100)
+temp_obj = counts.most_common(50)
 
 max_count = max(temp_obj, key=operator.itemgetter(1))[1]
 temp_obj = [(name, count / float(max_count))for name, count in temp_obj]
 temp_obj.pop(0) # remove "no_occupation"
 
 word_cloud = WordCloud(font_path="fonts/Georgia.ttf",
-    width=1280, height=800, max_words=100, stopwords=stop)
+    width=1280, height=800, max_words=50, stopwords=stop)
 word_cloud.fit_words(temp_obj)
 word_cloud.to_file("result/4_question3.png")
 print("========DONE==========")
