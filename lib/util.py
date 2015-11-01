@@ -153,6 +153,33 @@ class Util():
             temp_df = temp_df.append({"text": item}, ignore_index = True)
         temp_df.to_csv(path, index = False)
 
+    # Decision Tree Classifier
+    def train_dtc(X, y):
+        """
+        Create and train the Decision Tree Classifier.
+        """
+        dtc = DecisionTreeClassifier()
+        dtc.fit(X, y)
+        return dtc
+
+    # K-Nearest Neighbour Classifier
+    def train_knn(X, y, n, weight):
+        """
+        Create and train the k-nearest neighbor.
+        """
+        knn = KNeighborsClassifier(n_neighbors = n, weights = weight, metric = 'cosine', algorithm = 'brute')
+        knn.fit(X, y)
+        return knn
+
+    # Logistic Regression Classifier
+    def train_lr(X, y):
+        """
+        Create and train the Naive Baye's Classifier.
+        """
+        lr = LogisticRegression()
+        lr.fit(X, y)
+        return lr
+
 class Construction():
     def __init__(self, dictionary):
         self.dictionary = dictionary
