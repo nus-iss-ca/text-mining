@@ -1,5 +1,4 @@
 from lib.util import *
-import pandas as pd
 
 dummy_data = pd.read_csv("data/super_scraped.csv")
 list_id =[]

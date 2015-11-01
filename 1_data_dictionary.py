@@ -1,6 +1,5 @@
 from lib.util import *
 from collections import Counter
-import csv
 
 util = Util()
 

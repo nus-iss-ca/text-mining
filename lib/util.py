@@ -13,7 +13,7 @@ import numpy as np
 import collections
 import operator
 import image
-# import matplotlib.pyplot as plt
+import re
 
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
@@ -44,7 +44,8 @@ class Util():
     # input: text
     # output: text
     def normalize(self, text):
-        ntext = unicodedata.normalize('NFKD', text).encode('ascii','ignore')
+        # ntext = unicodedata.normalize('NFKD', text).encode('ascii','ignore')
+        ntext = text.encode('ascii', 'ignore')
         return ntext
 
     # function to remove punctuation
@@ -72,8 +73,8 @@ class Util():
                 if isinstance(row[c],int):
                     print str(index) + "----" + str(row[c])
                 else:
-                    temp = row[c]
-                    #temp = self.normalize(row[c])
+                    # temp = row[c]
+                    temp = self.normalize(row[c])
                     temp = self.remove_punctuation(temp, "","")
                     temp = temp.lower()
                     temp = self.remove_stopword(temp)
@@ -127,13 +128,12 @@ class Util():
         final = counts.most_common(max_words)
         max_count = max(final, key=operator.itemgetter(1))[1]
         final = [(name, count / float(max_count))for name, count in final]
-        self.save_array_to_file(final, "result/final_wordcloud.csv")
-        print "Test"
+
         # tags = make_tags(final, maxsize=max_word_size)
         # create_tag_image(tags, name_of_cloud+'.png', size=(width, height), layout=3, fontname='Crimson Text', background = (255, 255, 255))
 
         # temp_cloud = " ".join(text for text, count in final)
-        word_cloud = WordCloud(font_path="/Library/Fonts/Georgia.ttf",
+        word_cloud = WordCloud(font_path="fonts/Georgia.ttf",
             width=width, height=height, max_words=max_words, stopwords=stop)
         word_cloud.fit_words(final)
         word_cloud.to_file(name_of_cloud + ".png")
@@ -145,13 +145,6 @@ class Util():
         svm = SVC(C=C, gamma=gamma, kernel=kernel)
         svm.fit(vectors, data)
         return svm
-
-    # def convert_pd_to_text(self, df):
-    #     temp = pd.DataFrame()
-    #     columns = list(df.column.values)
-    #     for c in columns:
-
-    #     result = pd.concat([df, df['bar'].dropna()]).reindex_like(df)
 
     # using dataframe to save array to file
     def save_array_to_file(self, array, path):
